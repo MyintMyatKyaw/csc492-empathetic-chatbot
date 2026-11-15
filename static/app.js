@@ -29,9 +29,21 @@ function appendBubble(role, text) {
 
   const bubble = document.createElement("div");
   bubble.className = (role === "user" ? "user-bubble" : "bot-bubble") + " bubble";
-  bubble.innerHTML =
-    text.replace(/\n/g, "<br>") +
-    `<div class="timestamp">${role === "user" ? "User" : "Chatbot"} · ${nowTimeLabel()}</div>`;
+  // Safely render message text and preserve line breaks
+text.split("\n").forEach((line, index) => {
+  if (index > 0) {
+    bubble.appendChild(document.createElement("br"));
+  }
+  bubble.appendChild(document.createTextNode(line));
+});
+
+// Safely create the timestamp
+const timestamp = document.createElement("div");
+timestamp.className = "timestamp";
+timestamp.textContent =
+  `${role === "user" ? "User" : "Chatbot"} · ${nowTimeLabel()}`;
+
+bubble.appendChild(timestamp);
 
   if (role === "user") {
     const avatar = document.createElement("div");
